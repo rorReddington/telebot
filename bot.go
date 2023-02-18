@@ -10,7 +10,10 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
+
+	"go.uber.org/ratelimit"
 )
 
 // NewBot does try to build a Bot with token `token`, which
@@ -18,6 +21,10 @@ import (
 func NewBot(pref Settings) (*Bot, error) {
 	if pref.Updates == 0 {
 		pref.Updates = 100
+	}
+
+	if pref.PerSeconds == 0 {
+		pref.PerSeconds = -1
 	}
 
 	client := pref.Client
@@ -48,8 +55,27 @@ func NewBot(pref Settings) (*Bot, error) {
 		synchronous: pref.Synchronous,
 		verbose:     pref.Verbose,
 		testEnv:     pref.TestEnv,
+		rateLimit:   false,
 		parseMode:   pref.ParseMode,
 		client:      client,
+	}
+
+	wait := make(chan struct{})
+	if pref.PerSeconds != -1 {
+		bot.rateLimit = true
+		go func(b *Bot) {
+			rl := ratelimit.New(pref.PerSeconds)
+			bot.raws = make(chan *sync.Cond, pref.PerBufferSize)
+			wait <- struct{}{}
+			for raw := range bot.raws {
+				rl.Take()
+				raw.Broadcast()
+			}
+		}(bot)
+	} else {
+		go func() {
+			wait <- struct{}{}
+		}()
 	}
 
 	if pref.Offline {
@@ -80,7 +106,9 @@ type Bot struct {
 	synchronous bool
 	verbose     bool
 	testEnv 	bool
+	rateLimit   bool
 	parseMode   ParseMode
+	raws        chan *sync.Cond
 	stop        chan chan struct{}
 	client      *http.Client
 	stopClient  chan struct{}
@@ -109,6 +137,15 @@ type Settings struct {
 	// TestEnv is used to create a bot on Telegram test environment
 	// https://core.telegram.org/bots/webapps#using-bots-in-the-test-environment
 	TestEnv bool
+
+	// PerSeconds limits the number of requests per second executed
+	// by the client for Raw function. Default per in seconds is -1.
+	// To enable the queue, set the value greater than zero.
+	PerSeconds int
+
+	// PerBufferSize sets the size of the queue that is waiting for the signal to be sent.
+	// By default, the buffer is infinite and has a value equal to zero.
+	PerBufferSize int
 
 	// ParseMode used to set default parse mode of all sent messages.
 	// It attaches to every send, edit or whatever method. You also
