@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	tele "gopkg.in/telebot.v3"
+	tele "github.com/rorReddington/telebot"
 )
 
 func TestLayout(t *testing.T) {
