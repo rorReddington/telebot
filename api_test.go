@@ -3,6 +3,7 @@ package telebot
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -73,6 +74,38 @@ func TestRaw(t *testing.T) {
 
 	_, err = b.Raw("testUnknownError", nil)
 	assert.EqualError(t, err, "telegram: unknown error (400)")
+}
+
+func TestBotUrl(t *testing.T) {
+	url := "https://api.telegram.com"
+	token := "my-token"
+	method := "my-method"
+
+	tests := []struct {
+		name        string
+		testEnv     bool
+		expectedURL string
+	}{
+		{"when bot is not set to test environment", false, fmt.Sprintf("%s/bot%s/%s", url, token, method)},
+		{"when bot is set to test environment", true, fmt.Sprintf("%s/bot%s/test/%s", url, token, method)},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			pref := Settings{
+				URL:     url,
+				Token:   token,
+				Offline: true,
+				TestEnv: tt.testEnv,
+			}
+
+			bot, err := NewBot(pref)
+			assert.NoError(t, err)
+
+			url := bot.url(method)
+			assert.Equal(t, tt.expectedURL, url)
+		})
+	}
 }
 
 func TestExtractOk(t *testing.T) {

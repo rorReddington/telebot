@@ -63,6 +63,7 @@ func TestNewBot(t *testing.T) {
 	pref.Client = client
 	pref.Poller = &LongPoller{Timeout: time.Second}
 	pref.Updates = 50
+	pref.TestEnv = true
 	pref.ParseMode = ModeHTML
 	pref.Offline = true
 
@@ -72,6 +73,7 @@ func TestNewBot(t *testing.T) {
 	assert.Equal(t, pref.URL, b.URL)
 	assert.Equal(t, pref.Poller, b.Poller)
 	assert.Equal(t, 50, cap(b.Updates))
+	assert.Equal(t, pref.TestEnv, b.testEnv)
 	assert.Equal(t, ModeHTML, b.parseMode)
 }
 

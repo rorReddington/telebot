@@ -47,6 +47,7 @@ func NewBot(pref Settings) (*Bot, error) {
 
 		synchronous: pref.Synchronous,
 		verbose:     pref.Verbose,
+		testEnv:     pref.TestEnv,
 		parseMode:   pref.ParseMode,
 		client:      client,
 	}
@@ -78,6 +79,7 @@ type Bot struct {
 	handlers    map[string]HandlerFunc
 	synchronous bool
 	verbose     bool
+	testEnv 	bool
 	parseMode   ParseMode
 	stop        chan chan struct{}
 	client      *http.Client
@@ -103,6 +105,10 @@ type Settings struct {
 	// Verbose forces bot to log all upcoming requests.
 	// Use for debugging purposes only.
 	Verbose bool
+
+	// TestEnv is used to create a bot on Telegram test environment
+	// https://core.telegram.org/bots/webapps#using-bots-in-the-test-environment
+	TestEnv bool
 
 	// ParseMode used to set default parse mode of all sent messages.
 	// It attaches to every send, edit or whatever method. You also
