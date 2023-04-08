@@ -162,26 +162,32 @@ func (b *Bot) ProcessUpdate(u Update) {
 
 		if m.ForumTopicCreated != nil {
 			b.handle(OnForumTopicCreated, c)
+			return
 		}
 
 		if m.ForumTopicEdited != nil {
 			b.handle(OnForumTopicEdited, c)
+			return
 		}
 
 		if m.ForumTopicClosed != nil {
 			b.handle(OnForumTopicClosed, c)
+			return
 		}
 
 		if m.ForumTopicReopened != nil {
 			b.handle(OnForumTopicReopened, c)
+			return
 		}
 
 		if m.GeneralForumTopicHidden != nil {
 			b.handle(OnGeneralForumTopicHidden, c)
+			return
 		}
 
 		if m.GeneralForumTopicUnHidden != nil {
 			b.handle(OnGeneralForumTopicUnHidden, c)
+			return
 		}
 
 		if m.VideoChatStarted != nil {

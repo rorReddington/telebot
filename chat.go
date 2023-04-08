@@ -37,7 +37,7 @@ type Chat struct {
 	Type ChatType `json:"type"`
 
 	// If the supergroup chat is a forum (has topics enabled)
-	IsForum string `json:"is_forum,omitempty"`
+	IsForum bool `json:"is_forum,omitempty"`
 
 	// Won't be there for ChatPrivate.
 	Title string `json:"title"`
