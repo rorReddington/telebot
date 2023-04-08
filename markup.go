@@ -25,6 +25,13 @@ type ReplyMarkup struct {
 	// has selected the bot‘s message and tapped "Reply").
 	ForceReply bool `json:"force_reply,omitempty"`
 
+	// Requests clients to always show the keyboard when the regular keyboard 
+	// is hidden. 
+	// 
+	// Defaults to false, in which case the custom keyboard can be hidden 
+	// and opened with a keyboard icon.
+	IsPersistent bool `json:"is_persistent,omitempty"`
+
 	// Requests clients to resize the keyboard vertically for optimal fit
 	// (e.g. make the keyboard smaller if there are just two rows of buttons).
 	//

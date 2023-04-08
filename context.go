@@ -452,6 +452,10 @@ func (c *nativeContext) DeleteAfter(d time.Duration) *time.Timer {
 }
 
 func (c *nativeContext) Notify(action ChatAction) error {
+	msg := c.Message()
+	if msg != nil && msg.TopicMessage {
+		return c.b.Notify(c.Recipient(), action, MessageThreadID(msg.ThreadID))
+	}
 	return c.b.Notify(c.Recipient(), action)
 }
 

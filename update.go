@@ -223,6 +223,11 @@ func (b *Bot) ProcessUpdate(u Update) {
 			b.handle(OnAutoDeleteTimer, c)
 			return
 		}
+
+		if m.WriteAccessAllowed != nil {
+			b.handle(OnWriteAccessAllowed, c)
+			return
+		}
 	}
 
 	if u.EditedMessage != nil {

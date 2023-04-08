@@ -686,7 +686,7 @@ func (b *Bot) Delete(msg Editable) error {
 // Currently, Telegram supports only a narrow range of possible
 // actions, these are aligned as constants of this package.
 //
-func (b *Bot) Notify(to Recipient, action ChatAction) error {
+func (b *Bot) Notify(to Recipient, action ChatAction, opts ...interface{}) error {
 	if to == nil {
 		return ErrBadRecipient
 	}
@@ -695,6 +695,9 @@ func (b *Bot) Notify(to Recipient, action ChatAction) error {
 		"chat_id": to.Recipient(),
 		"action":  string(action),
 	}
+
+	sendOpts := extractOptions(opts)
+	b.embedSendOptions(params, sendOpts)
 
 	_, err := b.Raw("sendChatAction", params)
 	return err
@@ -1063,6 +1066,9 @@ func (b *Bot) ProfilePhotosOf(user *User) ([]Photo, error) {
 }
 
 // ChatMemberOf returns information about a member of a chat.
+//
+// The method is only guaranteed to work for other users if the bot 
+// is an administrator in the chat.
 func (b *Bot) ChatMemberOf(chat, user Recipient) (*ChatMember, error) {
 	params := map[string]string{
 		"chat_id": chat.Recipient(),

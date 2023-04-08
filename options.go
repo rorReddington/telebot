@@ -21,6 +21,9 @@ const (
 	// Silent = SendOptions.DisableNotification
 	Silent
 
+	// Spoiler = SendOptions.HasSpoiler
+	Spoiler
+
 	// AllowWithoutReply = SendOptions.AllowWithoutReply
 	AllowWithoutReply
 
@@ -74,6 +77,9 @@ type SendOptions struct {
 	// Sends the message silently. iOS users will not receive a notification, Android users will receive a notification with no sound.
 	DisableNotification bool
 
+	// For photo, video, animation. Covers with a spoiler animation.
+	HasSpoiler bool
+
 	// ParseMode controls how client apps render your message.
 	ParseMode ParseMode
 
@@ -115,6 +121,8 @@ func extractOptions(how []interface{}) *SendOptions {
 				opts.DisableWebPagePreview = true
 			case Silent:
 				opts.DisableNotification = true
+			case Spoiler:
+				opts.HasSpoiler = true
 			case AllowWithoutReply:
 				opts.AllowWithoutReply = true
 			case ForceReply:
@@ -170,6 +178,10 @@ func (b *Bot) embedSendOptions(params map[string]string, opt *SendOptions) {
 
 	if opt.DisableNotification {
 		params["disable_notification"] = "true"
+	}
+
+	if opt.HasSpoiler {
+		params["has_spoiler"] = "true"
 	}
 
 	if opt.ParseMode != ModeDefault {

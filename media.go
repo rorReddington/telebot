@@ -29,6 +29,7 @@ type InputMedia struct {
 	Performer            string   `json:"performer,omitempty"`
 	Streaming            bool     `json:"supports_streaming,omitempty"`
 	DisableTypeDetection bool     `json:"disable_content_type_detection,omitempty"`
+	HasSpoiler           bool     `json:"has_spoiler,omitempty"`
 }
 
 // Inputtable is a generic type for all kinds of media you

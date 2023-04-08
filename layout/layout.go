@@ -43,6 +43,7 @@ type (
 		inline          *bool
 		keyboard        *template.Template
 		ResizeKeyboard  *bool `yaml:"resize_keyboard,omitempty"` // nil == true
+		IsPersistent  	bool `yaml:"is_persistent,omitempty"`
 		ForceReply      bool  `yaml:"force_reply,omitempty"`
 		OneTimeKeyboard bool  `yaml:"one_time_keyboard,omitempty"`
 		RemoveKeyboard  bool  `yaml:"remove_keyboard,omitempty"`
@@ -401,6 +402,7 @@ func (lt *Layout) MarkupLocale(locale, k string, args ...interface{}) *tele.Repl
 		}
 	} else {
 		r.ResizeKeyboard = markup.ResizeKeyboard == nil || *markup.ResizeKeyboard
+		r.IsPersistent = markup.IsPersistent
 		r.ForceReply = markup.ForceReply
 		r.OneTimeKeyboard = markup.OneTimeKeyboard
 		r.RemoveKeyboard = markup.RemoveKeyboard

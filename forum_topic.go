@@ -100,9 +100,12 @@ func (b *Bot) CreateForumTopic(chat *Chat, ft *ForumTopic) (*ForumTopic, error) 
 	return resp.Result, nil
 }
 
-// EditForumTopic edites edit name and icon of a topic in a forum supergroup chat.
+// EditForumTopic edits name and icon of a topic in a forum supergroup chat.
 // The bot must be an administrator in the chat for this to work and must have
 // CanManageTopics administrator rights, unless it is the creator of the topic.
+//
+// The parameters name and icon are optional. If they are omitted, the existing
+// values are kept.
 func (b *Bot) EditForumTopic(chat *Chat, msgThreadID int, name string, icon string) error {
 	params := map[string]string{
 		"chat_id":           chat.Recipient(),
@@ -189,4 +192,67 @@ func (b *Bot) GetForumTopicIconStickers() ([]Sticker, error) {
 		return nil, wrapError(err)
 	}
 	return resp.Result, nil
+}
+
+// EditGeneralForumTopic edits the name of the 'General' topic in a forum
+// supergroup chat. The bot must be an administrator in the chat for this
+// to work and must have CanManageTopics administrator rights.
+func (b *Bot) EditGeneralForumTopic(chat *Chat, name string) error {
+	params := map[string]string{
+		"chat_id": chat.Recipient(),
+		"name":    name,
+	}
+
+	_, err := b.Raw("editGeneralForumTopic", params)
+	return err
+}
+
+// CloseGeneralForumTopic closes an open 'General' topic in a forum supergroup chat.
+// The bot must be an administrator in the chat for this to work and must have the
+// CanManageTopics administrator rights.
+func (b *Bot) CloseGeneralForumTopic(chat *Chat) error {
+	params := map[string]string{
+		"chat_id": chat.Recipient(),
+	}
+
+	_, err := b.Raw("closeGeneralForumTopic", params)
+	return err
+}
+
+// ReopenGeneralForumTopic reopens a closed 'General' topic in a forum supergroup chat.
+// The bot must be an administrator in the chat for this to work and must have the
+// CanManageTopics administrator rights. The topic will be automatically unhidden
+// if it was hidden.
+func (b *Bot) ReopenGeneralForumTopic(chat *Chat) error {
+	params := map[string]string{
+		"chat_id": chat.Recipient(),
+	}
+
+	_, err := b.Raw("reopenGeneralForumTopic", params)
+	return err
+}
+
+// HideGeneralForumTopic hides the 'General' topic in a forum supergroup chat.
+// The bot must be an administrator in the chat for this to work and must have the
+// CanManageTopics administrator rights. The topic will be automatically closed
+// if it was open.
+func (b *Bot) HideGeneralForumTopic(chat *Chat) error {
+	params := map[string]string{
+		"chat_id": chat.Recipient(),
+	}
+
+	_, err := b.Raw("hideGeneralForumTopic", params)
+	return err
+}
+
+// UnhideGeneralForumTopic unhides the 'General' topic in a forum supergroup chat.
+// The bot must be an administrator in the chat for this to work and must have the
+// CanManageTopics administrator rights.
+func (b *Bot) UnhideGeneralForumTopic(chat *Chat) error {
+	params := map[string]string{
+		"chat_id": chat.Recipient(),
+	}
+
+	_, err := b.Raw("unhideGeneralForumTopic", params)
+	return err
 }

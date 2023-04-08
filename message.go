@@ -90,6 +90,9 @@ type Message struct {
 	// Some messages containing media, may as well have a caption.
 	Caption string `json:"caption,omitempty"`
 
+	// For the message media covered by a spoiler animation.
+	HasMediaSpoiler bool `json:"has_media_spoiler,omitempty"`
+
 	// For messages with a caption, special entities like usernames, URLs,
 	// bot commands, etc. that appear in the caption.
 	CaptionEntities Entities `json:"caption_entities,omitempty"`
@@ -274,6 +277,10 @@ type Message struct {
 	// For a service message, represents about a change in auto-delete timer settings.
 	AutoDeleteTimer *AutoDeleteTimer `json:"message_auto_delete_timer_changed,omitempty"`
 
+	// For a service message, represents about a user allowing a bot added 
+	// to the attachment menu to write messages.
+	WriteAccessAllowed *WriteAccessAllowed `json:"write_access_allowed,omitempty"`
+
 	// Inline keyboard attached to the message.
 	ReplyMarkup *ReplyMarkup `json:"reply_markup,omitempty"`
 }
@@ -343,6 +350,10 @@ type ProximityAlert struct {
 type AutoDeleteTimer struct {
 	Unixtime int `json:"message_auto_delete_time"`
 }
+
+// WriteAccessAllowed represents a service message about a user allowing a bot added 
+// to the attachment menu to write messages.
+type WriteAccessAllowed struct {}
 
 // MessageSig satisfies Editable interface (see Editable.)
 func (m *Message) MessageSig() (string, int64) {
