@@ -47,6 +47,12 @@ func Placeholder(text string) *SendOptions {
 	}
 }
 
+// ToForumThread is used to set input field MessageThreadID
+// as a send option.
+func ToForumThread(messageThreadID int) MessageThreadID {
+	return MessageThreadID(messageThreadID)
+}
+
 // SendOptions has most complete control over in what way the message
 // must be sent, providing an API-complete set of custom properties
 // and options.
@@ -79,6 +85,9 @@ type SendOptions struct {
 
 	// Protected protects the contents of the sent message from forwarding and saving
 	Protected bool
+
+	// MessageThreadID unique identifier of a message thread.
+	MessageThreadID int
 }
 
 func (og *SendOptions) copy() *SendOptions {
@@ -132,6 +141,8 @@ func extractOptions(how []interface{}) *SendOptions {
 			opts.ParseMode = opt
 		case Entities:
 			opts.Entities = opt
+		case MessageThreadID:
+			opts.MessageThreadID = int(opt)
 		default:
 			panic("telebot: unsupported send-option")
 		}
@@ -188,6 +199,10 @@ func (b *Bot) embedSendOptions(params map[string]string, opt *SendOptions) {
 
 	if opt.Protected {
 		params["protect_content"] = "true"
+	}
+
+	if opt.MessageThreadID != 0 {
+		params["message_thread_id"] = strconv.Itoa(opt.MessageThreadID)
 	}
 }
 

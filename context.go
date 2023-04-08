@@ -349,11 +349,19 @@ func (c *nativeContext) Args() []string {
 }
 
 func (c *nativeContext) Send(what interface{}, opts ...interface{}) error {
+	msg := c.Message()
+	if msg != nil && msg.TopicMessage {
+		opts = append(opts, MessageThreadID(msg.ThreadID))
+	}
 	_, err := c.b.Send(c.Recipient(), what, opts...)
 	return err
 }
 
 func (c *nativeContext) SendAlbum(a Album, opts ...interface{}) error {
+	msg := c.Message()
+	if msg != nil && msg.TopicMessage {
+		opts = append(opts, MessageThreadID(msg.ThreadID))
+	}
 	_, err := c.b.SendAlbum(c.Recipient(), a, opts...)
 	return err
 }
@@ -363,11 +371,17 @@ func (c *nativeContext) Reply(what interface{}, opts ...interface{}) error {
 	if msg == nil {
 		return ErrBadContext
 	}
+	if msg.TopicMessage {
+		opts = append(opts, MessageThreadID(msg.ThreadID))
+	}
 	_, err := c.b.Reply(msg, what, opts...)
 	return err
 }
 
 func (c *nativeContext) Forward(msg Editable, opts ...interface{}) error {
+	if c.Message() != nil && c.Message().ThreadID != 0 {
+		opts = append(opts, MessageThreadID(c.Message().ThreadID))
+	}
 	_, err := c.b.Forward(c.Recipient(), msg, opts...)
 	return err
 }

@@ -2,29 +2,28 @@
 //
 // Example:
 //
-//		package main
+//	package main
 //
-//		import (
-//			"time"
-//			tele "gopkg.in/telebot.v3"
-//		)
+//	import (
+//		"time"
+//		tele "gopkg.in/telebot.v3"
+//	)
 //
-//		func main() {
-//			b, err := tele.NewBot(tele.Settings{
-//				Token:  "...",
-//				Poller: &tele.LongPoller{Timeout: 10 * time.Second},
-//			})
-//			if err != nil {
-//				return
-//			}
-//
-//			b.Handle("/start", func(c tele.Context) error {
-//				return c.Send("Hello world!")
-//			})
-//
-//			b.Start()
+//	func main() {
+//		b, err := tele.NewBot(tele.Settings{
+//			Token:  "...",
+//			Poller: &tele.LongPoller{Timeout: 10 * time.Second},
+//		})
+//		if err != nil {
+//			return
 //		}
 //
+//		b.Handle("/start", func(c tele.Context) error {
+//			return c.Send("Hello world!")
+//		})
+//
+//		b.Start()
+//	}
 package telebot
 
 import "errors"
@@ -102,6 +101,13 @@ const (
 	OnVideoChatEnded        = "\avideo_chat_ended"
 	OnVideoChatParticipants = "\avideo_chat_participants_invited"
 	OnVideoChatScheduled    = "\avideo_chat_scheduled"
+
+	OnForumTopicCreated       	= "\aforum_topic_created"
+	OnForumTopicEdited        	= "\aforum_topic_edited"
+	OnForumTopicClosed        	= "\aforum_topic_closed"
+	OnForumTopicReopened      	= "\aforum_topic_reopened"
+	OnGeneralForumTopicHidden 	= "\ageneral_forum_topic_hidden"
+	OnGeneralForumTopicUnHidden = "\ageneral_forum_topic_unhidden"
 )
 
 // ChatAction is a client-side status indicating bot activity.

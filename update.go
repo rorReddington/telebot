@@ -160,6 +160,30 @@ func (b *Bot) ProcessUpdate(u Update) {
 			return
 		}
 
+		if m.ForumTopicCreated != nil {
+			b.handle(OnForumTopicCreated, c)
+		}
+
+		if m.ForumTopicEdited != nil {
+			b.handle(OnForumTopicEdited, c)
+		}
+
+		if m.ForumTopicClosed != nil {
+			b.handle(OnForumTopicClosed, c)
+		}
+
+		if m.ForumTopicReopened != nil {
+			b.handle(OnForumTopicReopened, c)
+		}
+
+		if m.GeneralForumTopicHidden != nil {
+			b.handle(OnGeneralForumTopicHidden, c)
+		}
+
+		if m.GeneralForumTopicUnHidden != nil {
+			b.handle(OnGeneralForumTopicUnHidden, c)
+		}
+
 		if m.VideoChatStarted != nil {
 			b.handle(OnVideoChatStarted, c)
 			return

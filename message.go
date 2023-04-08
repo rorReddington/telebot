@@ -10,7 +10,10 @@ import (
 type Message struct {
 	ID int `json:"message_id"`
 
-	// For message sent to channels, Sender will be nil
+	// For supergroups only, unique identifier of a message thread.
+	ThreadID int `json:"message_thread_id,omitempty"`
+
+	// For message sent to channels, Sender will be nil.
 	Sender *User `json:"from"`
 
 	// Unixtime, use Message.Time() to get time.Time
@@ -42,6 +45,9 @@ type Message struct {
 
 	// For forwarded messages, unixtime of the original message.
 	OriginalUnixtime int `json:"forward_date"`
+
+	// (Optional) Message is sent to a forum topic.
+	TopicMessage bool `json:"is_topic_message,omitempty"`
 
 	// Message is a channel post that was automatically forwarded to the connected discussion group.
 	AutomaticForward bool `json:"is_automatic_forward"`
@@ -225,6 +231,26 @@ type Message struct {
 
 	// The domain name of the website on which the user has logged in.
 	ConnectedWebsite string `json:"connected_website,omitempty"`
+
+	// For a service message, a new forum topic created in the chat.
+	ForumTopicCreated *ForumTopicCreated `json:"forum_topic_created,omitempty"`
+
+	// For a service message, a forum topic closed in the chat.
+	ForumTopicEdited *ForumTopicEdited `json:"forum_topic_edited,omitempty"`
+
+	// For a service message, a service message about an edited forum topic.
+	ForumTopicClosed *ForumTopicClosed `json:"forum_topic_closed,omitempty"`
+
+	// For a service message, a service message about a forum topic reopened in the chat.
+	ForumTopicReopened *ForumTopicReopened `json:"forum_topic_reopened,omitempty"`
+
+	// For a service message, a service message about General forum topic
+	// hidden in the chat. Currently holds no information.
+	GeneralForumTopicHidden *GeneralForumTopicHidden `json:"general_forum_topic_hidden,omitempty"`
+
+	// For a service message, a service message about General forum topic
+	// unhidden in the chat. Currently holds no information.
+	GeneralForumTopicUnHidden *GeneralForumTopicUnhidden `json:"general_forum_topic_unhidden,omitempty"`
 
 	// For a service message, a video chat started in the chat.
 	VideoChatStarted *VideoChatStarted `json:"video_chat_started,omitempty"`

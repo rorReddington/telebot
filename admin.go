@@ -27,6 +27,7 @@ type Rights struct {
 	CanAddPreviews      bool `json:"can_add_web_page_previews"`
 	CanManageVideoChats bool `json:"can_manage_video_chats"`
 	CanManageChat       bool `json:"can_manage_chat"`
+	CanManageTopics     bool `json:"can_manage_topics"`
 }
 
 // NoRights is the default Rights{}.
@@ -56,6 +57,7 @@ func NoRestrictions() Rights {
 		CanAddPreviews:      true,
 		CanManageVideoChats: false,
 		CanManageChat:       false,
+		CanManageTopics:     false,
 	}
 }
 
@@ -78,6 +80,7 @@ func AdminRights() Rights {
 		CanAddPreviews:      true,
 		CanManageVideoChats: true,
 		CanManageChat:       true,
+		CanManageTopics:     true,
 	}
 }
 
